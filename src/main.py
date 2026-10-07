@@ -10,6 +10,8 @@ logging.basicConfig(
 )
 
 def main():
+    logging.info("DEV_CONTAINER_STARTED")
+    devices = parse_json("data/devices.json")
     devices = parse_json("data/devices.json")
     interfaces = parse_yaml("data/interfaces.yaml")
     inventory = parse_csv("data/inventory.csv")
