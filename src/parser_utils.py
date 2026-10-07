@@ -5,6 +5,13 @@ import xml.etree.ElementTree as ET
 
 import yaml
 
+logging.basicConfig(
+    filename="logs/lab.log",
+    level=logging.INFO,
+    format="%(message)s",
+    force=True,
+)
+
 def parse_json(file_path):
     try:
         with open(file_path, "r") as file:
