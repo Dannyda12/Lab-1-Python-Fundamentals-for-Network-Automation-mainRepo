@@ -1,22 +1,30 @@
+
 import logging
+from pathlib import Path
 
 from network_device import NetworkDevice
 from parser_utils import parse_json, parse_yaml, parse_xml, parse_csv
 
+ROOT = Path(__file__).resolve().parent.parent
+LOG_DIR = ROOT / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 logging.basicConfig(
-    filename="logs/lab.log",
+    filename=str(LOG_DIR / "lab.log"),
     level=logging.INFO,
     format="%(message)s",
+    force=True,
 )
 
-def main():
-    logging.info("DEV_CONTAINER_STARTED")
-    devices = parse_json("data/devices.json")
-    devices = parse_json("data/devices.json")
-    interfaces = parse_yaml("data/interfaces.yaml")
-    inventory = parse_csv("data/inventory.csv")
-    vlans = parse_xml("data/vlans.xml")
 
+def main():
+    logging.info("LAB1_START")
+    logging.info("[STEP 2] Dev Container Started")
+
+    devices = parse_json(ROOT / "data/devices.json")
+    interfaces = parse_yaml(ROOT / "data/interfaces.yaml")
+    inventory = parse_csv(ROOT / "data/inventory.csv")
+    vlans = parse_xml(ROOT / "data/vlans.xml")
 
     for device in devices:
         device_obj = NetworkDevice(
@@ -25,27 +33,27 @@ def main():
             device["type"],
         )
         device_obj.summarize()
-        logging.info("INTERFACE_MESSAGE")
 
     for interface in interfaces["interfaces"]:
-        msg = F"INTERFACE_MESSAGE: {interface['name']}  {interface['status']}"
+        msg = f"Interface {interface['name']} is {interface['status']}"
         print(msg)
-        logging.info(msg)
+        logging.info("INTERFACE_MSG: %s", msg)
 
     for device in devices:
-        msg = F"DEVICE_MESSAGE: {device['hostname']}  {device['ip']}  {device['type']}"
+        msg = f"Device {device['hostname']} is a {device['type']}"
         print(msg)
-        logging.info(msg)
+        logging.info("DEVICE_MSG: %s", msg)
 
     for vlan in vlans.findall("vlan"):
-        msg = f"VLAN_MESSAGE: {vlan.find('id').text} {vlan.find('name').text}"
+        msg = f"VLAN {vlan.find('id').text} is the {vlan.find('name').text}"
         print(msg)
-        logging.info(msg)
+        logging.info("VLAN_MSG: %s", msg)
+
+    logging.info("LAB1_END")
+
 
 if __name__ == "__main__":
-    logging.info("LAB1_START")
     main()
-    logging.info("LAB1_END")
-    
+
 
 

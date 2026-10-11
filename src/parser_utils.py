@@ -1,9 +1,12 @@
 import csv
 import json
 import logging
+import os
 import xml.etree.ElementTree as ET
 
 import yaml
+
+os.makedirs("logs", exist_ok=True)
 
 logging.basicConfig(
     filename="logs/lab.log",
@@ -20,10 +23,11 @@ def parse_json(file_path):
         return data
     except FileNotFoundError:
         logging.error("PARSE_JSON_ERROR")
-        return[]
+        return []
     except json.JSONDecodeError:
         logging.error("PARSE_JSON_ERROR")
         return []
+
 
 def parse_yaml(file_path):
     try:
