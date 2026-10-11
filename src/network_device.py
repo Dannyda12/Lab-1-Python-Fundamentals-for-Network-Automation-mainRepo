@@ -10,7 +10,7 @@ class NetworkDevice:
     def summarize(self):
         summary = (
             f"DEVICE_SUMMARY: {self.hostname} "
-            f"{self.device_type} {self.ip_address} "
+            f"({self.device_type}) - {self.ip_address}"
         )
         print(summary)
         logging.info(summary)
